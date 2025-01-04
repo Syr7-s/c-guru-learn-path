@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+spec:
+  containers:
+  - name: myapp
+    image: myapp
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "200m"
+    livenessProbe:
+      exec:
+        command:
+          - echo
+          - "Hello World"
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      failureThreshold: 1
+    readinessProbe:
+      exec:
+        command:
+          - echo
+          - "Hello World"
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      failureThreshold: 1
+  - name: nginx-ssl
+    image: nginx
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "200m"
+  
