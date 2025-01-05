@@ -11,9 +11,17 @@ spec:
     image: nginx
     volumeMounts:
     - name: shared-data
-      mounthPath: /usr/share/nginx/html
+      mountPath: /usr/share/nginx/html
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
   - name: ftp-container
     image: fauria/vsftpd
     volumeMounts:
     - name: shared-data
-      mounthPath: pod-data
+      mountPath: pod-data
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
