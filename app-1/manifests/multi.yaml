@@ -25,3 +25,9 @@ spec:
       limits:
         memory: "128Mi"
         cpu: "500m"
+    env:
+    - name: FTP_USER
+      value: admin
+    - name: FTP_PASS
+      value: password
+    
