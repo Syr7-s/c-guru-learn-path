@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+  labels:
+    app: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: europe-west1-docker.pkg.dev/playground-s-11-4545f264/syr-gke-arc/myapp:blue
+        ports:
+        - containerPort: 8888
+        resources:
+          requests:
+            cpu: 200m
