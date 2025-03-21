@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: myapp-green
   labels:
-    - app: green
+    app: myapp
 spec:
   replicas: 1
   selector:
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: europe-west1-docker.pkg.dev/playground-s-11-a8d93435/syr-reg/myapp:green-v1
+          image: europe-west1-docker.pkg.dev/playground-s-11-194074fb/syr-reg/myapp:green-v1
           ports:
             - containerPort: 80
               

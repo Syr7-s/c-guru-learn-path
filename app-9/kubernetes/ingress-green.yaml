@@ -12,10 +12,11 @@ spec:
     http:
       paths:
       - path: /green
-        pathType: prefix
+        pathType: Prefix
         backend:
           service:
             name: myapp-green-service
-            port:
-              number: 8080
+            port: 
+              number: 80
+
 
