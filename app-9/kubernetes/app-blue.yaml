@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-blue
+  labels:
+    - app: blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: blue
+    spec:
+      containers:
+        - name: myapp
+          image: europe-west1-docker.pkg.dev/playground-s-11-a8d93435/syr-reg/myapp-blue:v1
+          ports:
+            - containerPort: 80
+
+

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-green
+  labels:
+    - app: green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+      version: green
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: green
+    spec:
+      containers:
+        - name: myapp
+          image: europe-west1-docker.pkg.dev/playground-s-11-a8d93435/syr-reg/myapp:green-v1
+          ports:
+            - containerPort: 80
+              
+
