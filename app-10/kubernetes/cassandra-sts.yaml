@@ -5,23 +5,24 @@ metadata:
   labels:
     app: cassandra
 spec:
+  serviceName: cassandra
   selector:
     matchLabels:
       app: cassandra
-  services: cassandra
   updateStrategy:
-    type: RolloutUpdate
+    type: RollingUpdate
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: Retain
     whenScaled: Retain
   replicas: 3
-  templates:
+  template:
     metadata:
-      name: cassandra
+      labels:
+        app: cassandra
     spec:
         terminationGracePeriodSeconds: 300
         containers:
-          name: cassandra
+        - name: cassandra
           image: gcr.io/google-samples/cassandra:v13
           imagePullPolicy: Always
           ports:
@@ -103,12 +104,12 @@ spec:
           volumeMounts:
             - name: cassandra-data
               mountPath: /cassandra_data
-      volumeClaimTemplates:
-        - metadata:
-            name: cassandra-data
-          spec:
-            accessModes: ['ReadWriteOnce']
-            storageClassName: fast
-            reqources:
-              requests:
-                storage: 1Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: cassandra-data
+      spec:
+        accessModes: ['ReadWriteOnce']
+        storageClassName: fast
+        resources:
+          requests:
+            storage: 1Gi
