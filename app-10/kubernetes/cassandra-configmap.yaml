@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cassandra-env
+data:
+  max-heap-size: "512M"
+  heap-new-size: "100M"
+  cassandra-seeds: "cassandra-0.cassandra.default.svc.cluster.local"
+  cassandra-cluster-name: "K8Demo"
+  cassandra-dc: "DC1-K8Demo"
+  cassandra-rack: "Rack1-K8Demo"

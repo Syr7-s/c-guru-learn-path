@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cassandra
+  labels:
+    app: cassandra
+spec:
+  selector:
+    matchLabels:
+      app: cassandra
+  services: cassandra
+  updateStrategy:
+    type: RolloutUpdate
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  replicas: 3
+  templates:
+    metadata:
+      name: cassandra
+    spec:
+        terminationGracePeriodSeconds: 300
+        containers:
+          name: cassandra
+          image: gcr.io/google-samples/cassandra:v13
+          imagePullPolicy: Always
+          ports:
+            - name: intra-node
+              containerPort: 7000
+            - name: tls-intra-node
+              containerPort: 7001
+            - name: jmx
+              containerPort: 7199
+            - name: cql
+              containerPort: 9042
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "300Mi"
+            limits:
+              cpu: "450m"
+              memory: "900Mi"
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - /ready-probe.sh
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: 9142
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+          securityContext:
+            capabilities:
+              add: ["IPC_LOCK"]
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - nodetool drain
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MAX_HEAP_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: cassandra-env
+                  key: max-heap-size
+            - name: HEAP_NEWSIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: cassandra-env
+                  key: heap-new-size
+            - name: CASSANDRA_SEEDS
+              valueFrom:
+                configMapKeyRef:
+                  name: cassandra-env
+                  key: cassandra-seeds
+            - name: CASSANDRA_CLUSTER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: cassandra-env
+                  key: cassandra-cluster-name
+            - name: CASSANDRA_DC
+              valueFrom:
+                configMapKeyRef:
+                  name: cassandra-env
+                  key: cassandra-dc
+            - name: CASSANDRA_RACK
+              valueFrom:
+                configMapKeyRef:
+                  name: cassandra-env
+                  key: cassandra-rack
+          volumeMounts:
+            - name: cassandra-data
+              mountPath: /cassandra_data
+      volumeClaimTemplates:
+        - metadata:
+            name: cassandra-data
+          spec:
+            accessModes: ['ReadWriteOnce']
+            storageClassName: fast
+            reqources:
+              requests:
+                storage: 1Gi
