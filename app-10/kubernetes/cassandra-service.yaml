@@ -25,11 +25,15 @@ spec:
   selector:
     app: cassandra
   ports:
-    - port: 9042
+    - name: cql
+      port: 9042
       targetPort: 9042
-    - port: 7000
+    - name: intra-node
+      port: 7000
       targetPort: 7000
-    - port: 7001
-      targetPort: 70001
-    - port: 7199
+    - name: tls-intra-node
+      port: 7001
+      targetPort: 7001
+    - name: jmx
+      port: 7199
       targetPort: 7199
