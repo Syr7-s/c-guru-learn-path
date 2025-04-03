@@ -1,0 +1,45 @@
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: rook-ceph
+  namespace: rook-ceph
+spec:
+  cephVersion:
+    image: ceph/ceph:v14.2.1-20190430 # Önerilen: Belirli bir sürüm kullanın.
+    allowUnsupported: false # Önerilen: Üretimde false olarak ayarlayın.
+  dataDirHostPath: /var/lib/rook
+  mon:
+    count: 3
+    allowMultiplePerNode: false # Önerilen: Üretimde false olarak ayarlayın.
+  dashboard:
+    enabled: true
+  network:
+    hostNetwork: false # Önerilen: İhtiyacınız yoksa false olarak ayarlayın.
+  storage:
+    useAllNodes: true
+    useAllDevices: false
+---
+#apiVersion: ceph.rook.io/v1
+#kind: CephCluster
+#metadata:
+#  name: rook-ceph
+#  namespace: rook-ceph
+#spec:
+#  cephVersion:
+#    image: ceph/ceph:v14.2.1-20190430 # Önerilen: Belirli bir sürüm kullanın.
+#    allowUnsupported: false # Önerilen: Üretimde false olarak ayarlayın.
+#  dataDirHostPath: /var/lib/rook
+#  mon:
+#    count: 3
+#    allowMultiplePerNode: false # Önerilen: Üretimde false olarak ayarlayın.
+#  dashboard:
+#    enabled: true
+#  network:
+#    hostNetwork: false # Önerilen: İhtiyacınız yoksa false olarak ayarlayın.
+#  storage:
+#    useAllNodes: false
+#    useAllDevices: false
+#    nodes:
+#    - name: "minikube" # Node adını kendi ortamınıza göre değiştirin.
+#      directories:
+#      - path: /var/lib/rook
